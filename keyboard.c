@@ -54,12 +54,6 @@ void main(void)
 	TR0 = 1;
 	EA = 1;
 	
-	SCON = 0x40;  // Tryb 1: 8-bit uart, zmienna predkosc transmisji
-	TMOD |= 0x20;  
-	PCON = 0x80;  // SMOD = 1: predkosc transmisji x 2
-	TH1 = 0xFF;
-	TL1 = 0xFF;
-	TR1 = 1;
 	
 	P0_3 = 1;
 	P0_4 = 0;
@@ -79,7 +73,6 @@ void main(void)
 					{
 						oldValue = newValue;
 						newValue = tableTranslation[i];
-						SBUF = i;
 						while(condition) {;}
 					}
 					

@@ -26,7 +26,10 @@ void main(void)
 	
 	P1_7 = 0;
 	
-	while(1){;}
+	while(1)
+	{
+	PCON |= 0x01;
+	}
 }
 
 void but(void) interrupt 0
