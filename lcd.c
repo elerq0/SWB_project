@@ -123,7 +123,7 @@ void LcdInit(void)
 	 tempJ = j;
 	 for(k = 0; k <  10; k++)
 	 {
-		 if((tempI + k) > 14) 
+		 if((tempI + k) > 15) 
 		 {
 			tempI = -k;
 			tempJ+=1;

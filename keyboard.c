@@ -34,10 +34,10 @@ unsigned char old, counter;
 																				
 void main(void)
 {
-	leftPos = 0x3F;
-	rightPos = 0x3F;
-	oldValue = 0x3F;
-	newValue = 0x3F;
+	leftPos = 0x00;
+	rightPos = 0x00;
+	oldValue = 0x00;
+	newValue = 0x00;
   iterator = 0;
 	i = 0;
 	old = 0x00;
@@ -54,9 +54,15 @@ void main(void)
 	TR0 = 1;
 	EA = 1;
 	
+	SCON = 0x40;  // Tryb 1: 8-bit uart, zmienna predkosc transmisji
+	TMOD |= 0x20;  
+	PCON = 0x80;  // SMOD = 1: predkosc transmisji x 2
+	TH1 = 0xFF;
+	TL1 = 0xFF;
+	TR1 = 1;
 	
-	P0_3 = 1;
-	P0_4 = 0;
+	P3_6 = 1;
+	P3_7 = 0;
 	
 	while(1)
 	{
@@ -73,6 +79,7 @@ void main(void)
 					{
 						oldValue = newValue;
 						newValue = tableTranslation[i];
+						SBUF = i;
 						while(condition) {;}
 					}
 					
@@ -83,6 +90,8 @@ void main(void)
 					{
 						leftPos = oldValue;
 						rightPos = newValue;
+						SBUF = i;
+						while(condition) {;}
 					}
 				}
 			}
@@ -172,12 +181,18 @@ void but2 (void) interrupt 2
 void tim (void) interrupt 1
 {
 	TH0 = 0xFE;
-	P1 = 0x00;
+	if(P3_7 == 0)
+	{
+	P3_6 = 1;
+	P3_7 = 1;
 	P1 = leftPos;
-	P0_3 = !P0_3;
-	P0_4 = !P0_4;
-	P1 = 0x00;
+	P3_6 = 0;
+	}
+	else
+	{
+	P3_6 = 1;
+	P3_7 = 1;
 	P1 = rightPos;
-	P0_3 = !P0_3;
-	P0_4 = !P0_4;
+	P3_7 = 0;
+	}
 }
